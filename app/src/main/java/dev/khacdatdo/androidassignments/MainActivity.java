@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,18 +18,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import adaper.TaskAdapter;
-import model.Task;
+import adaper.VeAdapter;
+import model.Ve;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Task> taskArrayList = new ArrayList<>();
-    private TaskAdapter taskAdapter;
-
-    private EditText edtTaskName;
-    private EditText edtTaskDescription;
-    private RadioGroup radioGender;
-    private EditText edtDueDate;
+    private ArrayList<Ve> veArrayList = new ArrayList<>();
+    private VeAdapter veAdapter;
+    private EditText edtMaVe;
+    private RadioGroup radioLoaiVe;
+    private EditText edtNgayBay;
+    private CheckBox ckbThanhToan;
     private EditText edtSearch;
     private Button btnAddTask;
     private Button btnUpdateTask;
@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Resources
-        this.listView = this.findViewById(R.id.list_tasks);
-        this.edtTaskName = this.findViewById(R.id.edt_taskName);
-        this.edtTaskDescription = this.findViewById(R.id.edt_taskDescription);
-        this.radioGender = this.findViewById(R.id.radio_taskGender);
-        this.edtDueDate = this.findViewById(R.id.edt_taskDueDate);
+        this.listView = this.findViewById(R.id.list_ve);
+        this.edtMaVe = this.findViewById(R.id.edit_maVe);
+        this.radioLoaiVe = this.findViewById(R.id.radio_loaiVe);
+        this.edtNgayBay = this.findViewById(R.id.edit_ngayBay);
+        this.ckbThanhToan = this.findViewById(R.id.checkbox_thanhToan);
         this.edtSearch = this.findViewById(R.id.edt_searchTasks);
         this.btnAddTask = this.findViewById(R.id.btn_addTask);
         this.btnUpdateTask = this.findViewById(R.id.btn_editTask);
@@ -56,12 +56,15 @@ public class MainActivity extends AppCompatActivity {
         this.btnSearch = this.findViewById(R.id.btn_searchTask);
 
         // Seed list tasks
-        this.taskArrayList.add(new Task("Làm bài tập", "Bài tập Android", "male", "2023-03-03"));
-        this.taskArrayList.add(new Task("Thực hành", "Thực hành lập trình Android", "female", "2023-03-20"));
+        this.veArrayList.add(new Ve("123", "VIP", "2022-02-02", true));
+        this.veArrayList.add(new Ve("123", "VIP", "2022-02-02", true));
+        this.veArrayList.add(new Ve("123", "VIP", "2022-02-02", true));
+        this.veArrayList.add(new Ve("123", "VIP", "2022-02-02", true));
+
         this.initListView();
 
         // Add events
-        edtDueDate.setOnClickListener(this.onPickDate());
+        edtNgayBay.setOnClickListener(this.onPickDate());
         listView.setOnItemClickListener(this.onClickTaskItem());
         btnAddTask.setOnClickListener(this.onAddTask());
         btnUpdateTask.setOnClickListener(this.onUpdateTask());
@@ -70,19 +73,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void initListView() {
-        this.taskAdapter = new TaskAdapter(this, taskArrayList);
-        this.listView.setAdapter(this.taskAdapter);
+        this.veAdapter = new VeAdapter(MainActivity.this, this.veArrayList);
+        this.listView.setAdapter(this.veAdapter);
     }
 
     protected void showToast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
         toast.show();
     }
 
     protected boolean validate() {
-        if (this.edtTaskName.getText().toString().isEmpty()
-                || this.edtTaskDescription.getText().toString().isEmpty()
-                || this.edtDueDate.getText().toString().isEmpty()) {
+        if (this.edtMaVe.getText().toString().isEmpty()
+                || this.edtNgayBay.getText().toString().isEmpty()) {
             showToast("Must not empty");
             return false;
         }
@@ -91,17 +93,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void fillTaskToForm(int position) {
-        Task task = taskArrayList.get(position);
-        edtTaskName.setText(task.getName());
-        edtTaskDescription.setText(task.getDescription());
-        edtDueDate.setText(task.getDueDate());
-        radioGender.check(task.getGender().compareToIgnoreCase("male") == 0 ? R.id.check_genderMale : R.id.check_genderFemale);
+        Ve ve = this.veArrayList.get(position);
+        edtMaVe.setText(ve.getMave());
+        edtNgayBay.setText(ve.getNgayBay());
+        ckbThanhToan.setChecked(ve.isThanhToan());
+        switch (ve.getLoaiVe()) {
+            case "VIP": {
+                RadioButton radio = (RadioButton) findViewById(R.id.check_vip);
+                radio.setChecked(true);
+                break;
+            }
+            case "Phổ thông": {
+                RadioButton radio = (RadioButton) findViewById(R.id.check_phothong);
+                radio.setChecked(true);
+                break;
+            }
+            case "Giá rẻ": {
+                RadioButton radio = (RadioButton) findViewById(R.id.check_giare);
+                radio.setChecked(true);
+                break;
+            }
+        }
     }
 
     protected void clearForm() {
-        edtTaskName.setText("");
-        edtTaskDescription.setText("");
-        edtDueDate.setText("");
+        edtMaVe.setText("");
+        edtNgayBay.setText("");
+        ckbThanhToan.setChecked(false);
     }
 
     protected View.OnClickListener onPickDate() {
@@ -113,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                                edtDueDate.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                                edtNgayBay.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -128,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("CLicked");
                 taskItemSelected = i;
                 fillTaskToForm(i);
             }
@@ -139,16 +158,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    RadioButton radioButton = (RadioButton) findViewById(radioGender.getCheckedRadioButtonId());
-                    taskArrayList.add(
-                            new Task(
-                                    edtTaskName.getText().toString(),
-                                    edtTaskDescription.getText().toString(),
-                                    radioButton.getText().toString().toLowerCase().trim(),
-                                    edtDueDate.getText().toString()
+                    RadioButton radioButton = (RadioButton) findViewById(radioLoaiVe.getCheckedRadioButtonId());
+                    veArrayList.add(
+                            new Ve(
+                                    edtMaVe.getText().toString(),
+                                    radioButton.getText().toString().trim(),
+                                    edtNgayBay.getText().toString(),
+                                    ckbThanhToan.isChecked()
                             )
                     );
-                    taskAdapter.notifyDataSetChanged();
+                    veAdapter.notifyDataSetChanged();
                     showToast("Added");
                     clearForm();
                 }
@@ -165,17 +184,17 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 if (validate()) {
-                    RadioButton radioButton = (RadioButton) findViewById(radioGender.getCheckedRadioButtonId());
-                    taskArrayList.set(
+                    RadioButton radioButton = (RadioButton) findViewById(radioLoaiVe.getCheckedRadioButtonId());
+                    veArrayList.set(
                             taskItemSelected,
-                            new Task(
-                                    edtTaskName.getText().toString(),
-                                    edtTaskDescription.getText().toString(),
-                                    radioButton.getText().toString().toLowerCase(),
-                                    edtDueDate.getText().toString()
+                            new Ve(
+                                    edtMaVe.getText().toString(),
+                                    radioButton.getText().toString().trim(),
+                                    edtNgayBay.getText().toString(),
+                                    ckbThanhToan.isChecked()
                             )
                     );
-                    taskAdapter.notifyDataSetChanged();
+                    veAdapter.notifyDataSetChanged();
                     taskItemSelected = -1;
                     showToast("Updated");
                     clearForm();
@@ -192,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
                     showToast("Please select an item");
                     return;
                 }
-                taskArrayList.remove(taskItemSelected);
-                taskAdapter.notifyDataSetChanged();
+                veArrayList.remove(taskItemSelected);
+                veAdapter.notifyDataSetChanged();
                 taskItemSelected = -1;
                 showToast("Removed");
                 clearForm();
@@ -205,13 +224,13 @@ public class MainActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Task> filteredTask = new ArrayList<>();
-                taskArrayList.forEach(task -> {
-                    if (task.getName().indexOf(edtSearch.getText().toString().trim()) != -1) {
-                        filteredTask.add(task);
+                ArrayList<Ve> filteredVe = new ArrayList<>();
+                veArrayList.forEach(ve -> {
+                    if (ve.getMave().indexOf(edtSearch.getText().toString().trim()) != -1) {
+                        filteredVe.add(ve);
                     }
                 });
-                TaskAdapter filteredAdapter = new TaskAdapter(MainActivity.this, filteredTask);
+                VeAdapter filteredAdapter = new VeAdapter(MainActivity.this, filteredVe);
                 listView.setAdapter(filteredAdapter);
             }
         };
