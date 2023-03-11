@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txt_taskTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tasks"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edt_taskName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_taskTitle"
+            android:layout_marginTop="20dp"
+            android:hint="Name..."
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edt_taskDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_taskName"
+            android:layout_marginTop="20dp"
+            android:hint="Description..."
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/txt_taskGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_taskDescription"
+            android:layout_marginTop="20dp"
+            android:text="Gender:"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/radio_taskGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txt_taskGender"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/txt_taskGender">
+
+            <RadioButton
+                android:id="@+id/check_genderMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/check_genderFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/edt_taskDueDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radio_taskGender"
+            android:layout_marginTop="20dp"
+            android:allowClickWhenDisabled="true"
+            android:focusable="false"
+            android:hint="Due date..."
+            android:inputType="date" />
+
+        <RelativeLayout
+            android:id="@+id/layout_btnParent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_taskDueDate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/btn_addTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add" />
+
+            <Button
+                android:id="@+id/btn_editTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/btn_addTask"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/btn_addTask"
+                android:text="Update" />
+
+            <Button
+                android:id="@+id/btn_deleteTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/btn_addTask"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/btn_editTask"
+                android:text="Delete" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/edt_searchTasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_btnParent"
+            android:layout_marginTop="30dp"
+            android:hint="Keywords..." />
+
+        <Button
+            android:id="@+id/btn_searchTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_searchTasks"
+            android:layout_marginTop="10dp"
+            android:text="Search" />
+
+
+        <ListView
+            android:id="@+id/list_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_below="@id/btn_searchTask"
+            android:layout_marginTop="20dp"
+            android:nestedScrollingEnabled="true" />
+
+    </RelativeLayout>
+
+</ScrollView>

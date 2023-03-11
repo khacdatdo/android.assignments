@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Android Assignments</string>
+    <string name="tinh_toan">Tinh Toan</string>
+    <string-array name="phep">
+        <item>+</item>
+        <item>-</item>
+        <item>*</item>
+        <item>/</item>
+    </string-array>
+</resources>
